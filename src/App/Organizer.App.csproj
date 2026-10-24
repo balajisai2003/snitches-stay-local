@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Activity\Organizer.Modules.Activity.csproj" />
+    <ProjectReference Include="..\Modules\Ask\Organizer.Modules.Ask.csproj" />
+    <ProjectReference Include="..\Modules\Documents\Organizer.Modules.Documents.csproj" />
+    <ProjectReference Include="..\Modules\Identity\Organizer.Modules.Identity.csproj" />
+    <ProjectReference Include="..\Modules\Search\Organizer.Modules.Search.csproj" />
+    <ProjectReference Include="..\Modules\Shared\Organizer.Modules.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

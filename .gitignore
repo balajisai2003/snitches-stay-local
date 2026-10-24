@@ -1,0 +1,45 @@
+## .NET / C#
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+_ReSharper*/
+*.DotSettings.user
+TestResults/
+*.suo
+
+## Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+## IDE & Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+
+## OS Artifacts
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Thumbs.db
+Library/
+.local/
+
+## Local Storage & Volumes
+storage/
+/storage/
+*.log
+docker-volumes/

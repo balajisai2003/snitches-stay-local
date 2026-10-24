@@ -1,0 +1,38 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/App/">
+    <Project Path="src/App/Organizer.App.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Activity/">
+    <Project Path="src/Modules/Activity/Organizer.Modules.Activity.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Ask/">
+    <Project Path="src/Modules/Ask/Organizer.Modules.Ask.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Documents/">
+    <Project Path="src/Modules/Documents/Organizer.Modules.Documents.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/">
+    <Project Path="src/Modules/Identity/Organizer.Modules.Identity.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Search/">
+    <Project Path="src/Modules/Search/Organizer.Modules.Search.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Shared/">
+    <Project Path="src/Modules/Shared/Organizer.Modules.Shared.csproj" />
+  </Folder>
+  <Folder Name="/src/Processing/">
+    <Project Path="src/Processing/Organizer.Processing.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/App.Tests/">
+    <Project Path="tests/App.Tests/Organizer.App.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Architecture.Tests/">
+    <Project Path="tests/Architecture.Tests/Organizer.Architecture.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Processing.Tests/">
+    <Project Path="tests/Processing.Tests/Organizer.Processing.Tests.csproj" />
+  </Folder>
+</Solution>
