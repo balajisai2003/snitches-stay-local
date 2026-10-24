@@ -43,3 +43,7 @@ storage/
 /storage/
 *.log
 docker-volumes/
+
+## Agent Diary & Scratch Notes
+project-lore/agent-diary/
+project-lore/diary/

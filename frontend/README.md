@@ -11,3 +11,4 @@ The frontend application provides the user interface for:
 - React 19 / TypeScript
 - Vite
 - Tailwind CSS or modern CSS
+
