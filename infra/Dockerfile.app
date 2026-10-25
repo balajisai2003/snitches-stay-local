@@ -40,3 +40,4 @@ ENV Storage__RootPath=/storage
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "Organizer.App.dll"]
+
