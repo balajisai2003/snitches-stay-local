@@ -21,10 +21,9 @@ Before building the system, ensure the following tools are installed on your mac
   * **Visual Studio Code** with:
     * C# Dev Kit (`ms-dotnettools.csdevkit`)
     * Docker extension (`ms-azuretools.vscode-docker`)
-    * SQL Server extension (`ms-mssql.mssql`)
-* **SQL Management Tools:**
-  * Azure Data Studio or SQL Server Management Studio (SSMS).
-  * DBeaver or VS Code mssql extension.
+    * PostgreSQL extension (`cweijan.vscode-postgresql-client2` or `ckolkman.vscode-postgres`)
+* **Database Management Tools:**
+  * DBeaver, pgAdmin, TablePlus, or VS Code Database Client.
 
 ---
 

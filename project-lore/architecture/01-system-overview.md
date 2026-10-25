@@ -34,7 +34,7 @@ flowchart LR
     subgraph SharedInfra["Infrastructure & Storage"]
         direction TB
         RabbitMQ["RabbitMQ Broker"]
-        SQLServer[("SQL Server 2025<br/>(Module Schemas)")]
+        Postgres[("PostgreSQL 16 + pgvector<br/>(Module Schemas)")]
         Volume[("Shared Docker Volume<br/>(Originals & Results)")]
         Ollama["Local Ollama<br/>(AI & Vectors)"]
     end
@@ -42,7 +42,7 @@ flowchart LR
     Browser <-->|HTTP / Cookies| WebAPI
     WebAPI <-->|Commands & Replies| RabbitMQ
     RabbitMQ <-->|ProcessDocument.v1| Worker
-    WebAPI -->|EF Core Migrations| SQLServer
+    WebAPI -->|EF Core Migrations| Postgres
     WebAPI <-->|Originals & Results| Volume
     Worker <-->|Read Originals, Write Text| Volume
     WebAPI <-->|Embeddings & Chat| Ollama

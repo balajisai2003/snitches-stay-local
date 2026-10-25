@@ -7,27 +7,25 @@
 | **Main App** | ASP.NET Core Web API | .NET 10 LTS (C#) | High throughput, mature dependency injection, native health checks. |
 | **Processing Worker** | .NET Worker Service | .NET 10 LTS (C#) | Headless background daemon with minimal footprint. |
 | **Frontend** | React + TypeScript | Vite | Fast HMR, clean component model, single-page application. |
-| **Database** | Microsoft SQL Server | SQL Server 2025 (Docker) | Full-text search and vector columns in a single transactional database. |
-| **Data Access** | Entity Framework Core | 10.x | Code-first migrations, schema management, optimistic concurrency. |
+| **Database** | PostgreSQL + pgvector | PostgreSQL 16 (Docker) | Relational storage, native `tsvector` full-text search, and `pgvector` HNSW vector embeddings in one lightweight engine. |
+| **Data Access** | Entity Framework Core | 10.x (`Npgsql`) | Code-first migrations, schema management, optimistic concurrency, first-class pgvector support. |
 | **Message Broker** | RabbitMQ | 3.13+ (Docker) | Industrial message queuing; official .NET client behind `IMessageBus`. |
 | **File Storage** | Shared Docker Volume | Local Disk via `IFileStore` | Zero cloud storage cost, simple volume mapping between containers. |
 | **Local AI Engine** | Ollama | Latest (Docker or Host) | Local execution of LLM and embedding models; zero external API calls. |
 | **Telemetry** | OpenTelemetry + Jaeger | OTLP Standard | Unified distributed tracing crossing App $\leftrightarrow$ Worker boundaries. |
-| **Testing** | xUnit + Testcontainers | Latest | Fast unit tests + true containerized integration tests without mocks. |
+| **Testing** | xUnit + Testcontainers | Latest | Fast unit tests + true containerized integration tests (PostgreSql + RabbitMQ) without mocks. |
 
 ---
 
-## SQL Server 2025 Vector Search Architecture
+## PostgreSQL 16 & pgvector Vector Search Architecture
 
-SQL Server 2025 introduced native vector capabilities:
-* **Generally Available (GA) Features:** 
-  * The native `vector(dim)` column type.
-  * Exact vector distance functions: `VECTOR_DISTANCE('cosine', @v1, @v2)`.
-* **Preview Features (Do Not Depend On for v1):**
-  * Approximate Nearest Neighbor (ANN) index structures and `VECTOR_SEARCH` syntax are still preview features.
+PostgreSQL with the `pgvector` extension provides industry-standard vector capabilities:
+* **Storage:** Native `vector(dim)` column type inside the `ask` schema.
+* **Vector Indexing:** Battle-tested **HNSW (Hierarchical Navigable Small World)** and **IVFFlat** indexes for millisecond approximate nearest neighbor searches.
+* **Distance Operators:** Native cosine distance (`<=>`), L2 Euclidean distance (`<->`), and inner product (`<#>`).
 * **Scale Consideration:**
-  * At v1 scale (~2,000 documents $\approx$ 40,000 page chunks), exact cosine distance calculation via `VECTOR_DISTANCE` executes in **milliseconds**.
-  * By restricting queries to GA features and pre-filtering by `spaceId`, vector similarity search is ultra-fast, predictable, and robust.
+  * At v1 scale (~2,000 documents $\approx$ 40,000 page chunks), queries pre-filtered by `spaceId` with HNSW indexes execute in sub-millisecond to low millisecond speeds.
+  * Native Apple Silicon (arm64) support ensures top performance on macOS developer machines with minimal RAM footprint (~80–150 MB).
 
 ---
 
