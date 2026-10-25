@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Modules\Shared\Organizer.Modules.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="10.0.3" />
+  </ItemGroup>
+
 </Project>
