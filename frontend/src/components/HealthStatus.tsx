@@ -20,12 +20,12 @@ const SERVICES: ServiceConfig[] = [
   {
     name: 'Main App (Web API)',
     url: '/api/app-health',
-    fallbackUrl: 'http://localhost:5000/health',
+    fallbackUrl: 'http://localhost:5050/health',
   },
   {
     name: 'Processing Worker Service',
     url: '/api/processing-health',
-    fallbackUrl: 'http://localhost:5001/health',
+    fallbackUrl: 'http://localhost:5051/health',
   },
 ];
 
@@ -34,12 +34,12 @@ export const HealthStatus: React.FC = () => {
     'Main App (Web API)': {
       status: 'Loading',
       serviceName: 'Main App (Web API)',
-      endpointUrl: 'http://localhost:5000/health',
+      endpointUrl: 'http://localhost:5050/health',
     },
     'Processing Worker Service': {
       status: 'Loading',
       serviceName: 'Processing Worker Service',
-      endpointUrl: 'http://localhost:5001/health',
+      endpointUrl: 'http://localhost:5051/health',
     },
   });
 
@@ -188,7 +188,7 @@ export const HealthStatus: React.FC = () => {
                   <strong>Warning:</strong> {item.error}
                   <div className="hint">
                     Check if the process is running on port{' '}
-                    {svc.name.includes('App') ? '5000' : '5001'}.
+                    {svc.name.includes('App') ? '5050' : '5051'}.
                   </div>
                 </div>
               )}
@@ -206,3 +206,4 @@ export const HealthStatus: React.FC = () => {
     </div>
   );
 };
+

@@ -7,12 +7,12 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api/app-health': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5050',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/app-health/, '/health'),
       },
       '/api/processing-health': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5051',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/processing-health/, '/health'),
       },

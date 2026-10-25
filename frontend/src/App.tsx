@@ -26,12 +26,12 @@ export const App: React.FC = () => {
             <li>
               <strong>Start the Main App:</strong>
               <code>dotnet run --project src/App</code>
-              <span>(runs on <code>http://localhost:5000</code>)</span>
+              <span>(runs on <code>http://localhost:5050</code>)</span>
             </li>
             <li>
               <strong>Start the Processing Worker:</strong>
               <code>dotnet run --project src/Processing</code>
-              <span>(runs on <code>http://localhost:5001</code>)</span>
+              <span>(runs on <code>http://localhost:5051</code>)</span>
             </li>
             <li>
               <strong>Or Run with Docker Compose:</strong>
@@ -50,3 +50,4 @@ export const App: React.FC = () => {
 };
 
 export default App;
+

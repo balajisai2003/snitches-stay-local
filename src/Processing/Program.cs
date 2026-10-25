@@ -24,4 +24,6 @@ app.MapGet("/health", () => Results.Ok(new
     timestamp = DateTimeOffset.UtcNow 
 }));
 
+Console.WriteLine("🚀 [Organizer.Processing] Started successfully on http://localhost:5051");
+
 app.Run();
