@@ -1,0 +1,9 @@
+**/.git
+**/.vs
+**/.idea
+**/.vscode
+**/bin
+**/obj
+frontend/node_modules
+frontend/dist
+project-lore/agent-diary
