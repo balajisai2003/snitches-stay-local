@@ -55,8 +55,8 @@ check_http_endpoint() {
 
 check_http_endpoint "RabbitMQ Management UI" "http://localhost:15672"
 check_http_endpoint "Jaeger UI" "http://localhost:16686"
-check_http_endpoint "Main App Health" "http://localhost:5000/health"
-check_http_endpoint "Processing Health" "http://localhost:5001/health"
+check_http_endpoint "Main App Health" "http://localhost:5050/health"
+check_http_endpoint "Processing Health" "http://localhost:5051/health"
 
 echo ""
 echo "=========================================================="
