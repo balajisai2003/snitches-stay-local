@@ -49,24 +49,24 @@ export const HealthStatus: React.FC = () => {
   const checkServiceHealth = async (svc: ServiceConfig): Promise<HealthData> => {
     const startTime = performance.now();
     try {
-      // Attempt Vite proxy first, fallback to direct URL
+      // Attempt direct URL first (with CORS), fallback to Vite proxy
       let response: Response;
       try {
-        response = await fetch(svc.url, { cache: 'no-store' });
-      } catch {
         response = await fetch(svc.fallbackUrl, { credentials: 'omit', cache: 'no-store' });
+      } catch {
+        response = await fetch(svc.url, { cache: 'no-store' });
       }
 
       const elapsed = Math.round(performance.now() - startTime);
 
       if (!response.ok) {
         return {
-          status: 'Unhealthy',
+          status: 'Offline',
           serviceName: svc.name,
           endpointUrl: svc.fallbackUrl,
           latencyMs: elapsed,
           lastChecked: new Date().toLocaleTimeString(),
-          error: `HTTP Error: ${response.status} ${response.statusText}`,
+          error: `Backend process not running (Target ${svc.fallbackUrl} is offline)`,
         };
       }
 
@@ -79,7 +79,7 @@ export const HealthStatus: React.FC = () => {
         lastChecked: new Date().toLocaleTimeString(),
         payload: data,
       };
-    } catch (err) {
+    } catch {
       const elapsed = Math.round(performance.now() - startTime);
       return {
         status: 'Offline',
@@ -87,7 +87,7 @@ export const HealthStatus: React.FC = () => {
         endpointUrl: svc.fallbackUrl,
         latencyMs: elapsed,
         lastChecked: new Date().toLocaleTimeString(),
-        error: err instanceof Error ? err.message : 'Connection refused / service stopped',
+        error: `Cannot connect to ${svc.fallbackUrl}. Ensure the service is started.`,
       };
     }
   };

@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
     <BuildInParallel>false</BuildInParallel>
+    <UseAppHost>false</UseAppHost>
   </PropertyGroup>
 </Project>

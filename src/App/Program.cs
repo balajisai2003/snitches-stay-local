@@ -1,3 +1,5 @@
+Console.WriteLine("--> [Organizer.App] Starting up...");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -24,4 +26,4 @@ app.MapGet("/health", () => Results.Ok(new
 
 Console.WriteLine("🚀 [Organizer.App] Started successfully on http://localhost:5050");
 
-app.Run();
+app.Run("http://localhost:5050");
