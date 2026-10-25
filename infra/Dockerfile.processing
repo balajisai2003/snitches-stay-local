@@ -1,0 +1,37 @@
+# ==============================================================================
+# Dockerfile.processing (Independent Worker Service)
+# ==============================================================================
+
+# Stage 1: Build & Publish
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /source
+
+# Copy solution and project files for layer caching
+COPY Organizer.slnx ./
+COPY src/Processing/Organizer.Processing.csproj src/Processing/
+COPY src/Modules/Shared/Organizer.Modules.Shared.csproj src/Modules/Shared/
+
+# Restore dependencies
+RUN dotnet restore src/Processing/Organizer.Processing.csproj
+
+# Copy source files
+COPY src/Processing/ src/Processing/
+COPY src/Modules/Shared/ src/Modules/Shared/
+
+# Build and publish release binaries
+WORKDIR /source/src/Processing
+RUN dotnet publish Organizer.Processing.csproj -c Release -o /app/publish --no-restore -m:1
+
+# Stage 2: Runtime Environment
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Prepare shared volume directories
+RUN mkdir -p /storage/originals /storage/results && chmod -R 777 /storage
+
+ENV ASPNETCORE_URLS=http://+:8080
+ENV Storage__RootPath=/storage
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "Organizer.Processing.dll"]

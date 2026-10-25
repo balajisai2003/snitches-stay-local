@@ -44,6 +44,11 @@ storage/
 *.log
 docker-volumes/
 
+## Environment Variables & Secrets
+.env
+*.env
+!.env.example
+
 ## Agent Diary & Scratch Notes
 project-lore/agent-diary/
 project-lore/diary/
