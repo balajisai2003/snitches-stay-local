@@ -12,25 +12,26 @@
 
 ---
 
-### 2. SQL Server Container Fails to Start or Exit Code 1
-* **Symptom:** `organizer-sql` keeps restarting.
-* **Root Cause:** The `MSSQL_SA_PASSWORD` does not meet Microsoft SQL Server complexity requirements (must contain at least 8 characters including uppercase, lowercase, numbers, and symbols).
-* **Fix:** Use a compliant password such as `YourStrong@Passw0rd`. Check container logs:
+### 2. PostgreSQL Container Fails to Start or Health Check Fails
+* **Symptom:** `organizer-postgres` keeps restarting or fails health check.
+* **Root Cause:** Corrupted data directory or port 5432 conflict with a local host PostgreSQL service.
+* **Fix:** Check container logs:
   ```bash
-  docker compose logs sqlserver
+  docker compose logs postgres
   ```
+  If port 5432 is in use by a host service, change `POSTGRES_PORT` in `infra/.env` (e.g. `POSTGRES_PORT=5433`).
 
 ---
 
 ### 3. Port Conflicts on Local Machine
-* **Symptom:** `Error response from daemon: Ports are not available: listen tcp 0.0.0.0:1433: bind: address already in use`.
-* **Fix:** Another local instance of SQL Server, Postgres, or RabbitMQ is using that port. Check active ports:
+* **Symptom:** `Error response from daemon: Ports are not available: listen tcp 0.0.0.0:5432: bind: address already in use`.
+* **Fix:** Another local instance of PostgreSQL or RabbitMQ is using that port. Check active ports:
   ```bash
   # macOS / Linux
-  lsof -i :1433
+  lsof -i :5432
   lsof -i :5672
   ```
-  Terminate the competing process or remap the host port in `infra/docker-compose.yml` (e.g. `"11433:1433"`).
+  Terminate the competing process or remap the host port in `infra/docker-compose.yml` (e.g. `"15432:5432"`).
 
 ---
 

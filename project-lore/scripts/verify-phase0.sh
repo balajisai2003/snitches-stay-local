@@ -58,6 +58,19 @@ check_http_endpoint "Jaeger UI" "http://localhost:16686"
 check_http_endpoint "Main App Health" "http://localhost:5050/health"
 check_http_endpoint "Processing Health" "http://localhost:5051/health"
 
+check_port() {
+    local name=$1
+    local port=$2
+    if nc -z localhost "$port" 2>/dev/null || lsof -i :"$port" &>/dev/null; then
+        echo -e "[${GREEN}OK${NC}] $name is listening on port $port"
+    else
+        echo -e "[${YELLOW}PENDING${NC}] $name is not listening on port $port (may not be started yet)."
+    fi
+}
+
+check_port "PostgreSQL" 5432
+check_port "RabbitMQ (AMQP)" 5672
+
 echo ""
 echo "=========================================================="
 echo " Verification check completed."

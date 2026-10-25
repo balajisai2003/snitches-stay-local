@@ -79,7 +79,7 @@ docker compose up -d sqlserver rabbitmq jaeger
 Verify services are running:
 * **RabbitMQ UI:** Open [http://localhost:15672](http://localhost:15672) (User: `organizer`, Pass: `organizer_secret`)
 * **Jaeger UI:** Open [http://localhost:16686](http://localhost:16686)
-* **SQL Server:** Connect via SSMS/Azure Data Studio on `localhost:1433` (User: `sa`, Pass: `YourStrong@Passw0rd`)
+* **PostgreSQL:** Connect via DBeaver/psql on `localhost:5432` (User: `postgres`, Pass: `postgres`, DB: `organizer`)
 
 ---
 

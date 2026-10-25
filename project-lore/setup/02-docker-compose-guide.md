@@ -7,19 +7,19 @@ The entire local development and production environment is managed via a single 
 ```mermaid
 graph TD
     subgraph DockerBridge["Bridge Network: organizer-net"]
-        App["organizer-app (Port 5000)<br/>Web API Host"]
-        Processing["organizer-processing (Port 5001)<br/>Worker Daemon"]
-        SQL["organizer-sql (Port 1433)<br/>SQL Server 2025"]
+        App["organizer-app (Port 5050)<br/>Web API Host"]
+        Processing["organizer-processing (Port 5051)<br/>Worker Daemon"]
+        Postgres["organizer-postgres (Port 5432)<br/>PostgreSQL 16 + pgvector"]
         Rabbit["organizer-rabbitmq (Ports 5672, 15672)<br/>AMQP Broker & UI"]
         Jaeger["organizer-jaeger (Port 16686)<br/>Distributed Tracing"]
     end
 
     SharedVol[("Shared Volume: doc-storage<br/>/storage/originals<br/>/storage/results")]
-    SQLVol[("SQL Data Volume: sql-data")]
+    PostgresVol[("Postgres Data Volume: postgres-data")]
 
     App -->|Mounts| SharedVol
     Processing -->|Mounts| SharedVol
-    SQL -->|Mounts| SQLVol
+    Postgres -->|Mounts| PostgresVol
 ```
 
 ---
@@ -28,9 +28,9 @@ graph TD
 
 | Service Name | Container Name | Internal Port | Host Port | Purpose |
 | --- | --- | --- | --- | --- |
-| **`app`** | `organizer-app` | `8080` | `5000` | Main Web API & frontend assets |
-| **`processing`** | `organizer-processing` | `8080` | `5001` | Worker service health check & jobs endpoint |
-| **`sqlserver`** | `organizer-sql` | `1433` | `1433` | Microsoft SQL Server 2025 |
+| **`app`** | `organizer-app` | `8080` | `5050` | Main Web API & frontend assets |
+| **`processing`** | `organizer-processing` | `8080` | `5051` | Worker service health check & jobs endpoint |
+| **`postgres`** | `organizer-postgres` | `5432` | `5432` | PostgreSQL 16 with pgvector extension |
 | **`rabbitmq`** | `organizer-rabbitmq` | `5672` | `5672` | AMQP messaging protocol |
 | **`rabbitmq-ui`**| *(Same container)* | `15672` | `15672` | RabbitMQ web management console |
 | **`jaeger`** | `organizer-jaeger` | `16686` | `16686` | OpenTelemetry distributed trace viewer |
@@ -48,27 +48,28 @@ networks:
 
 volumes:
   doc-storage:
-  sql-data:
+  postgres-data:
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2025-latest
-    container_name: organizer-sql
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: organizer-postgres
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourStrong@Passw0rd
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=organizer
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sql-data:/var/opt/mssql
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - organizer-net
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -C -Q 'SELECT 1' || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d organizer"]
+      interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 5s
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -103,14 +104,14 @@ services:
       dockerfile: infra/Dockerfile.app
     container_name: organizer-app
     depends_on:
-      sqlserver:
+      postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
     ports:
-      - "5000:8080"
+      - "5050:8080"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=OrganizerDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=organizer;Username=postgres;Password=postgres;
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=organizer
       - RabbitMQ__Password=organizer_secret
@@ -130,7 +131,7 @@ services:
       rabbitmq:
         condition: service_healthy
     ports:
-      - "5001:8080"
+      - "5051:8080"
     environment:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=organizer

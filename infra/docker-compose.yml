@@ -5,32 +5,32 @@ networks:
 volumes:
   doc-storage:
     name: organizer-doc-storage
-  sql-data:
-    name: organizer-sql-data
+  postgres-data:
+    name: organizer-postgres-data
   rabbitmq-data:
     name: organizer-rabbitmq-data
 
 services:
-  sqlserver:
-    image: ${MSSQL_IMAGE:-mcr.microsoft.com/mssql/server:2025-latest}
-    container_name: organizer-sql
+  postgres:
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg16}
+    container_name: organizer-postgres
     restart: unless-stopped
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd}
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-organizer}
     ports:
-      - "${MSSQL_PORT:-1433}:1433"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - sql-data:/var/opt/mssql
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - organizer-net
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd}\" -C -Q 'SELECT 1' || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-organizer}"]
+      interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 5s
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -71,7 +71,7 @@ services:
     container_name: organizer-app
     restart: unless-stopped
     depends_on:
-      sqlserver:
+      postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
@@ -79,7 +79,7 @@ services:
       - "${APP_HOST_PORT:-5050}:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=OrganizerDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd};TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB:-organizer};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres};
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__Username=${RABBITMQ_USER:-organizer}
