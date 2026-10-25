@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /source
 
 # Copy solution and csproj files for optimized Docker layer caching
-COPY Organizer.slnx ./
+COPY Organizer.slnx Directory.Build.props ./
 COPY src/App/Organizer.App.csproj src/App/
 COPY src/Processing/Organizer.Processing.csproj src/Processing/
 COPY src/Modules/Activity/Organizer.Modules.Activity.csproj src/Modules/Activity/

@@ -76,7 +76,7 @@ services:
       rabbitmq:
         condition: service_healthy
     ports:
-      - "${APP_HOST_PORT:-5000}:8080"
+      - "${APP_HOST_PORT:-5050}:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=OrganizerDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd};TrustServerCertificate=True;
@@ -101,7 +101,7 @@ services:
       rabbitmq:
         condition: service_healthy
     ports:
-      - "${PROCESSING_HOST_PORT:-5001}:8080"
+      - "${PROCESSING_HOST_PORT:-5051}:8080"
     environment:
       - DOTNET_ENVIRONMENT=Development
       - RabbitMQ__Host=rabbitmq

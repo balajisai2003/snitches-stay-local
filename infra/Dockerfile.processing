@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /source
 
 # Copy solution and project files for layer caching
-COPY Organizer.slnx ./
+COPY Organizer.slnx Directory.Build.props ./
 COPY src/Processing/Organizer.Processing.csproj src/Processing/
 COPY src/Modules/Shared/Organizer.Modules.Shared.csproj src/Modules/Shared/
 

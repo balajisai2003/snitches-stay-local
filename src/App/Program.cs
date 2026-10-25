@@ -1,5 +1,3 @@
-Console.WriteLine("--> [Organizer.App] Starting up...");
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -24,6 +22,6 @@ app.MapGet("/health", () => Results.Ok(new
     timestamp = DateTimeOffset.UtcNow 
 }));
 
-Console.WriteLine("🚀 [Organizer.App] Started successfully on http://localhost:5050");
+Console.WriteLine($"🚀 [Organizer.App] Running in {app.Environment.EnvironmentName} mode");
 
-app.Run("http://localhost:5050");
+app.Run();

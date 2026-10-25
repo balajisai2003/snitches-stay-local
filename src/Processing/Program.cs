@@ -1,7 +1,5 @@
 using Organizer.Processing;
 
-Console.WriteLine("--> [Organizer.Processing] Starting up...");
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHostedService<Worker>();
@@ -26,6 +24,6 @@ app.MapGet("/health", () => Results.Ok(new
     timestamp = DateTimeOffset.UtcNow 
 }));
 
-Console.WriteLine("🚀 [Organizer.Processing] Started successfully on http://localhost:5051");
+Console.WriteLine($"🚀 [Organizer.Processing] Running in {app.Environment.EnvironmentName} mode");
 
-app.Run("http://localhost:5051");
+app.Run();
